@@ -5,3 +5,10 @@
  * @file
  * Provides an API to allow other modules use the onBeforeUnload event of the browser window.
  */
+
+/**
+ * Implementation of hook_init().
+ */
+function onbeforeunload_init() {
+  drupal_add_js(drupal_get_path('module', 'onbeforeunload') .'/onbeforeunload.js');
+}

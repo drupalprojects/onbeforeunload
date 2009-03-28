@@ -1,7 +1,7 @@
 // $Id$
 
 // Make sure our Drupal object exists.
-Drupal.onBeforeUnload = Drupal.onBeforeUnload || { _callbacks: {} };
+Drupal.onBeforeUnload = Drupal.onBeforeUnload || { __callbacks: {} };
 
 /**
  * Drupal behavior for Before Onload API.
@@ -16,17 +16,15 @@ Drupal.behaviors.onBeforeUnload = function(context) {
 
 /**
  * Global window handler for the onBeforeUnload event.
- *
- * @private
  */
-Drupal.onBeforeUnload.prototype.__windowHandler = function() {
+Drupal.onBeforeUnload.__windowHandler = function() {
   var module, callback, result, results = [];
 
   // Invoke all installed onBeforeUnload callbacks.
-  for (module in Drupal.onBeforeUnload._callbacks) {
-    callback = Drupal.onBeforeUnload._callbacks[module];
+  for (module in Drupal.onBeforeUnload.__callbacks) {
+    callback = Drupal.onBeforeUnload.__callbacks[module];
 
-    // Ignore uninstalled callbacks.
+    // Ignore callbacks that have been removed.
     if (typeof callback != 'function') {
       continue;
     }
@@ -49,20 +47,21 @@ Drupal.onBeforeUnload.prototype.__windowHandler = function() {
 /**
  * Add an onBeforeUnload callback.
  *
- * @public
+ * Note that it only possible to add one callback per module.
+ * It is up to the module implementing the callback itself to
+ * perform any check additional tasks it may need.
  *
  * @param module
- *   The name of the module that installs the callback.
- *   Note that one module can only install one onBeforeUnload callback.
+ *   The name of the module that adds the onBeforeUnload callback.
  * @param callback
  *   A function that will be called without arguments by our
  *   global onBeforeUnload handler.
  * @return
- *   TRUE if the callback was successfully installed. FALSE otherwise.
+ *   TRUE if the callback was successfully added, FALSE otherwise.
  */
-Drupal.onBeforeUnload.prototype.addCallback = function(module, callback) {
+Drupal.onBeforeUnload.addCallback = function(module, callback) {
   if (typeof module == 'string' && typeof callback == 'function') {
-    this._callbacks[module] = callback;
+    this.__callbacks[module] = callback;
     return true;
   }
   return false;
@@ -71,17 +70,27 @@ Drupal.onBeforeUnload.prototype.addCallback = function(module, callback) {
 /**
  * Remove an onBeforeUnload callback.
  *
- * @public
+ * @param module
+ *   The name of the module.
+ * @return
+ *   TRUE if the callback was successfully removed, FALSE otherwise.
+ */
+Drupal.onBeforeUnload.removeCallback = function(module) {
+  if (typeof this.__callbacks[module] == 'function') {
+    this.__callbacks[module] = null;
+    return true;
+  }
+  return false;
+};
+
+/**
+ * Check if a callback for a particular module exists.
  *
  * @param module
  *   The name of the module.
  * @return
- *   TRUE if the callback was successfully uninstalled. FALSE otherwise.
+ *   TRUE if the callback exists, FALSE otherwise.
  */
-Drupal.onBeforeUnload.prototype.removeCallback = function(module) {
-  if (typeof this._callbacks[module] == 'function') {
-    this._callbacks[module] = null;
-    return true;
-  }
-  return false;
+Drupal.onBeforeUnload.callbackExists = function(module) {
+  return (typeof this.__callbacks[module] == 'function');
 };
