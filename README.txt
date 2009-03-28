@@ -9,8 +9,10 @@
 CONTENTS OF THIS FILE
 =====================
 * OVERVIEW
+  * Modules using the onBeforeUnload API
+  * Web Standards
 * INSTALLATION
-* BASIC SAMPLE
+* BASIC EXAMPLE
 * API DOCUMENTATION
 
 
@@ -24,9 +26,27 @@ This module does not provide any direct functionally, it rather provides
 a centralized API that other modules can use to take advantage of the
 onBeforeUnload event of the browser window.
 
-Modules using the onBeforeUnload API:
+Modules using the onBeforeUnload API
+------------------------------------
 
 - http://drupal.org/project/dirtyforms (Dirty Forms).
+
+Web Standards
+-------------
+
+There is no public specification on the onBeforeUnload event. It was introduced
+by Microsoft IE 4 and has subsequently been copied by other browsers.
+
+References:
+
+- onBeforeUnload event (Microsoft Developer Network).
+  http://msdn.microsoft.com/en-us/library/ms536907(VS.85).aspx
+
+- window.onbeforeunload (Mozilla Developer Center).
+  https://developer.mozilla.org/en/DOM/window.onbeforeunload
+
+Please, let me know if there's any other browser that supports this event.
+Thanks! :)
 
 
 INSTALLATION
@@ -38,8 +58,8 @@ INSTALLATION
 - Goto Administer > Site building > Modules to install this module.
 
 
-BASIC SAMPLE
-============
+BASIC BASIC EXAMPLE
+===================
 
 Let's say your module needs to perform some check when the user leaves the page.
 Ok, this module should add a javascript file to the page with a code similar to
@@ -54,6 +74,8 @@ Drupal.behaviors.mymodule = function(context) {
   }
 };
 </code>
+
+Please, check out the onBeforeUnload Example module, shipped with this package.
 
 
 API DOCUMENTATION
