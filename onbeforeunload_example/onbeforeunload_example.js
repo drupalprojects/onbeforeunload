@@ -14,7 +14,7 @@ Drupal.behaviors.onbeforeunload_example = function(context) {
 /**
  * onBeforeUnload Example callback.
  *
- * This function will be called by onBeforeUnload API when the user leaved the
+ * This function will be called by onBeforeUnload API when the user leaves the
  * page.
  *
  * The string returned here will be prompted to the user, so do NOT return
