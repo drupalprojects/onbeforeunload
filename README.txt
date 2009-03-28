@@ -5,5 +5,9 @@
 ;; Module Author: markus_petrux (http://drupal.org/user/39593)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-The MAIN branch for this project is intentionally empty. Development and stable
-releases can be found by checking out from the proper branch.
+Placeholder for the onBeforeUnload API module. It will be required by the Dirty
+Forms module, which I'm going to commit when this one is ready enough.
+
+Project pages:
+- http://drupal.org/project/dirtyforms
+- http://drupal.org/project/onbeforeunload
