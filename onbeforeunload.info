@@ -1,0 +1,5 @@
+; $Id$
+name = onBeforeUnload API
+description = Provides an API to allow other modules use the onBeforeUnload event of the browser window.
+package = User interface
+core = 6.x

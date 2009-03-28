@@ -1,0 +1,7 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Provides an API to allow other modules use the onBeforeUnload event of the browser window.
+ */
