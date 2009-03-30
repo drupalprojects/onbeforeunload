@@ -97,9 +97,9 @@ Drupal.onBeforeUnload._windowHandler = function(event) {
 /**
  * Add an onBeforeUnload callback.
  *
- * Note that it only possible to add one callback per module.
+ * Note that it is only possible to add one callback per module.
  * It is up to the module implementing the callback itself to
- * perform any check additional tasks it may need.
+ * perform any additional tasks it may need.
  *
  * @param module
  *   The name of the module that adds the onBeforeUnload callback.
