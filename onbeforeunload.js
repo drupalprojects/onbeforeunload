@@ -79,15 +79,7 @@ Drupal.onBeforeUnload._windowHandler = function(event) {
   // If enabled, invoke all our installed onBeforeUnload callbacks.
   if (self._enabled) {
     for (module in self._callbacks) {
-      callback = self._callbacks[module];
-
-      // Ignore callbacks that have been removed.
-      if (typeof callback != 'function') {
-        continue;
-      }
-
-      // Invoke the callback and save the results.
-      result = (callback)();
+      result = (self._callbacks[module])();
       if (typeof result == 'string') {
         results.push(result);
       }
@@ -135,7 +127,7 @@ Drupal.onBeforeUnload.addCallback = function(module, callback) {
  */
 Drupal.onBeforeUnload.removeCallback = function(module) {
   if (typeof this._callbacks[module] == 'function') {
-    this._callbacks[module] = null;
+    delete this._callbacks[module];
     return true;
   }
   return false;
