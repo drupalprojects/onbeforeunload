@@ -64,13 +64,13 @@ Drupal.onBeforeUnload = Drupal.onBeforeUnload || {
 /**
  * Global window handler for the onBeforeUnload event.
  */
-Drupal.onBeforeUnload._windowHandler = function() {
+Drupal.onBeforeUnload._windowHandler = function(event) {
   var module, callback, result, results = [];
   var self = Drupal.onBeforeUnload;
 
   // Invoke any previous onBeforeUnload handler and save its result.
   if (typeof self._previousWindowHandler == 'function') {
-    result = self._previousWindowHandler();
+    result = self._previousWindowHandler(event);
     if (typeof result == 'string') {
       results.push(result);
     }
