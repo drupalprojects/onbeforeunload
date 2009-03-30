@@ -1,38 +1,96 @@
 // $Id$
 
-// Make sure our Drupal object exists.
-Drupal.onBeforeUnload = Drupal.onBeforeUnload || { __callbacks: {} };
+/**
+ * @file
+ * Provides an API to allow other modules use the onBeforeUnload event
+ * of the browser window.
+ *
+ * Public methods of the Drupal.onBeforeUnload object:
+ *
+ * - addCallback(module, callback)
+ *   Add an onBeforeUnload callback.
+ *
+ * - removeCallback(module)
+ *   Remove an onBeforeUnload callback.
+ *
+ * - callbackExists(module)
+ *   Check if a callback for a particular module exists.
+ *
+ * - enable()
+ *   Enable the onBeforeUnload event handler.
+ *
+ * - disable()
+ *   Disable the onBeforeUnload event handler.
+ *
+ * Note that any previously installed onBeforeUnload handler will still be
+ * invoked by our window event handler. We should do this to prevent from
+ * breaking the implementation of the one who installed its own before us.
+ */
 
 /**
- * Drupal behavior for Before Onload API.
+ * Drupal behavior for onBeforeUnload API.
  */
 Drupal.behaviors.onBeforeUnload = function(context) {
+  var self = Drupal.onBeforeUnload;
+
   // Bind our window handler if not already bound.
-  if (!Drupal.onBeforeUnload.processed) {
-    Drupal.onBeforeUnload.processed = true;
-    window.onbeforeunload = Drupal.onBeforeUnload.__windowHandler;
+  if (!self.processed) {
+    // Ensure we do not repeat this process more than once.
+    self.processed = true;
+
+    // Save a reference to the previous onBeforeUnload handler.
+    if (typeof window.onbeforeunload == 'function') {
+      self._previousWindowHandler = window.onbeforeunload;
+    }
+
+    // Now, bind our window handler for the onBeforeUnload event.
+    window.onbeforeunload = self._windowHandler;
+
+    // Finally, enable our event handler.
+    self.enable();
   }
+};
+
+/**
+ * Global onBeforeUnload object.
+ */
+Drupal.onBeforeUnload = Drupal.onBeforeUnload || {
+  processed: false,
+  _previousWindowHandler: null,
+  _enabled: false,
+  _callbacks: {}
 };
 
 /**
  * Global window handler for the onBeforeUnload event.
  */
-Drupal.onBeforeUnload.__windowHandler = function() {
+Drupal.onBeforeUnload._windowHandler = function() {
   var module, callback, result, results = [];
+  var self = Drupal.onBeforeUnload;
 
-  // Invoke all installed onBeforeUnload callbacks.
-  for (module in Drupal.onBeforeUnload.__callbacks) {
-    callback = Drupal.onBeforeUnload.__callbacks[module];
-
-    // Ignore callbacks that have been removed.
-    if (typeof callback != 'function') {
-      continue;
-    }
-
-    // Invoke the callback and save the results.
-    result = (callback)();
+  // Invoke any previous onBeforeUnload handler and save its result.
+  if (typeof self._previousWindowHandler == 'function') {
+    result = self._previousWindowHandler();
     if (typeof result == 'string') {
-      results[results.length] = result;
+      results.push(result);
+    }
+  }
+
+  // If enabled, invoke all our installed onBeforeUnload callbacks.
+  if (self._enabled) {
+    for (module in self._callbacks) {
+      callback = self._callbacks[module];
+
+      // Ignore callbacks that have been removed.
+      if (typeof callback != 'function') {
+        continue;
+      }
+
+      // Invoke the callback and save the results.
+      result = (callback)();
+      if (typeof result == 'string') {
+        results.push(result);
+      }
     }
   }
 
@@ -61,7 +119,7 @@ Drupal.onBeforeUnload.__windowHandler = function() {
  */
 Drupal.onBeforeUnload.addCallback = function(module, callback) {
   if (typeof module == 'string' && typeof callback == 'function') {
-    this.__callbacks[module] = callback;
+    this._callbacks[module] = callback;
     return true;
   }
   return false;
@@ -76,8 +134,8 @@ Drupal.onBeforeUnload.addCallback = function(module, callback) {
  *   TRUE if the callback was successfully removed, FALSE otherwise.
  */
 Drupal.onBeforeUnload.removeCallback = function(module) {
-  if (typeof this.__callbacks[module] == 'function') {
-    this.__callbacks[module] = null;
+  if (typeof this._callbacks[module] == 'function') {
+    this._callbacks[module] = null;
     return true;
   }
   return false;
@@ -92,5 +150,19 @@ Drupal.onBeforeUnload.removeCallback = function(module) {
  *   TRUE if the callback exists, FALSE otherwise.
  */
 Drupal.onBeforeUnload.callbackExists = function(module) {
-  return (typeof this.__callbacks[module] == 'function');
+  return (typeof this._callbacks[module] == 'function');
+};
+
+/**
+ * Disable the onBeforeUnload event handler.
+ */
+Drupal.onBeforeUnload.disable = function() {
+  this._enabled = false;
+};
+
+/**
+ * Enable the onBeforeUnload event handler.
+ */
+Drupal.onBeforeUnload.enable = function() {
+  this._enabled = true;
 };

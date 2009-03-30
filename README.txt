@@ -96,7 +96,7 @@ API DOCUMENTATION
  * @return
  *   TRUE if the callback was successfully added, FALSE otherwise.
  */
-Drupal.onBeforeUnload.addCallback = function(module, callback) {};
+Drupal.onBeforeUnload.addCallback(module, callback);
 
 /**
  * Remove an onBeforeUnload callback.
@@ -106,7 +106,7 @@ Drupal.onBeforeUnload.addCallback = function(module, callback) {};
  * @return
  *   TRUE if the callback was successfully removed, FALSE otherwise.
  */
-Drupal.onBeforeUnload.removeCallback = function(module) {};
+Drupal.onBeforeUnload.removeCallback(module);
 
 /**
  * Check if a callback for a particular module exists.
@@ -116,4 +116,14 @@ Drupal.onBeforeUnload.removeCallback = function(module) {};
  * @return
  *   TRUE if the callback exists, FALSE otherwise.
  */
-Drupal.onBeforeUnload.callbackExists = function(module) {};
+Drupal.onBeforeUnload.callbackExists(module);
+
+/**
+ * Disable the onBeforeUnload event handler.
+ */
+Drupal.onBeforeUnload.disable();
+
+/**
+ * Enable the onBeforeUnload event handler.
+ */
+Drupal.onBeforeUnload.enable();
