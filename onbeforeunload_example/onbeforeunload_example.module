@@ -13,6 +13,10 @@ function onbeforeunload_example_init() {
   // Send the example javascript to all pages on the site,
   // except admin pages.
   if (strpos($_GET['q'], 'admin') !== 0) {
+    // Load the onBeforeUnload API.
+    onbeforeunload_add_js();
+
+    // Install our client-side behavior.
     drupal_add_js(drupal_get_path('module', 'onbeforeunload_example') .'/onbeforeunload_example.js');
 
     // We will display the warning only to site administrators, but the

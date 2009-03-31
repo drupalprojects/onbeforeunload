@@ -62,10 +62,21 @@ BASIC BASIC EXAMPLE
 ===================
 
 Let's say your module needs to perform some check when the user leaves the page.
-Ok, this module should add a javascript file to the page with a code similar to
-this:
+Ok, this module should add the onBeforeUnload API and its own javascript file
+to the page with a code similar to this:
+
+<?php
+  // Add the onBeforeUnload API.
+  onbeforeunload_add_js();
+
+  // Add mymodule behavior.
+  drupal_add_js(drupal_get_path('module', 'mymodule') .'/mymodule.js');
+?>
 
 <code>
+/**
+ * Contents of mymodule.js.
+ */
 Drupal.behaviors.mymodule = function(context) {
   if (!Drupal.onBeforeUnload.callbackExists('mymodule')) {
     Drupal.onBeforeUnload.addCallback('mymodule', function() {
