@@ -1,6 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; onBeforeUnload Example
-;; $Id$
 ;;
 ;; Project homepage: http://drupal.org/project/onbeforeunload
 ;; Module Author: markus_petrux (http://drupal.org/user/39593)

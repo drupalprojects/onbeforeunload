@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * Install the Drupal behavior.
